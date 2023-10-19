@@ -155,11 +155,13 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate} from 'react-router-dom';
+import axios from 'axios';
 import './signup.css';
 // eslint-disable-next-line jsx-a11y/anchor-is-valid
 
-const SignUpForm = ({switchToLogin}) => {
-  const navigate = useNavigate();//Initialize useNavigate
+// const SignUpForm = ({switchToLogin}) => {
+const SignUpForm = ({switchToLogin, onSubmit}) => {
+  const navigate = useNavigate();//Initialize useNavigate //navigate("/dashboard")
   const [firstname, setFirstname] = useState('');
   const [lastname, setLastname] = useState('');
   const [email, setEmail] = useState('');
@@ -210,58 +212,21 @@ const SignUpForm = ({switchToLogin}) => {
     }
   };
 
-  //const handleSignUp = () => {
+  const handleSignUp = async() => {
     // Handle signup logic here
-  //};
-
-  const handleSignUp = async () => {
-    try {
-      // Prepare user registration data
-      const userData = {
-        firstname:firstname,
-        lastname:lastname,
-        email:email,
-        password:password,
-      };
-      console.log(userData);
-  
-      // Send a POST request to the registration endpoint
-      const response = await fetch('http://localhost:4000/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      });
-  
-      // Handle the response
-      if (response.status === 201) {
-        // User registered successfully
-        const data = await response.json();
-        // Handle the response data (e.g., store user token, redirect, etc.)
-        console.log('User registered:', data);
-  
-        // Assuming you want to navigate to a dashboard after successful registration
-        navigate("/dashboard");
-      } else {
-        // Registration failed
-        const errorData = await response.json();
-        console.error('Registration error:', errorData.message);
-      }
-    } catch (error) {
-      console.error('Error registering user:', error);
-
-      // if (error.response){
-      //   // The request was made and the server responded with a status code
-      //   // that falls out of the range of 2xx
-      //   console.error('Server responded with:', error.response.data);
-      // }else if (error.request){
-      //   // The request was made but no response was received
-      //   console.error('No response received from server');
-      // }else {
-      //   // Something happened in setting up the request that triggered an error
-      //   console.error('Error setting up the request:', error.message);
-      // }
+    try{
+      const response= await axios.post('http://localhost:4000/auth/register', {
+         firstname:firstname, 
+         lastname:lastname, 
+         email:email, 
+         password:password,
+         confirmPassword:confirmPassword,
+         });
+         //handle the response from the server
+         console.log(response.data);
+         navigate("/dashboard");
+      }catch(err){
+        console.log(err.message);
     }
   };
 
