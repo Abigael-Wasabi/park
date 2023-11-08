@@ -6,7 +6,7 @@ const RequestRide = () => {
     <div className="request-ride">
         <h3 style={{ textAlign: 'center', fontSize:'15px'}}>would like to journey on</h3>
         <a href="#" style={{textDecoration: 'none', color: 'black'}}><h2 className="d-flex flex-column
-         align-items-center" style={{textAlign:'center',marginTop: '270px'}}>REQUEST A RIDE</h2></a>
+         align-items-center" style={{textAlign:'center'}}>REQUEST A RIDE</h2></a>
     </div>
   );
 };

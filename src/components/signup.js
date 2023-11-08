@@ -1,156 +1,4 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-// import React, { useState } from 'react';
-// import { Link, useNavigate } from 'react-router-dom';
-// import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import './signup.css';
-
-
-// const SignUpForm = ({ switchToLogin }) => {
-//   const navigate = useNavigate();//Initialize useNavigate
-//   const [showPassword, setShowPassword] = useState(false);
-//   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-//   const [formData, setFormData] = useState({
-//     firstname: '',
-//     lastname: '',
-//     email: '',
-//     password: '',
-//     confirmPassword: '',
-//     privacyPolicy: false,
-//   });
-
-//   const handlePasswordVisibility = (field) => {
-//     console.log(`Toggling visibility for ${field} field`);
-//     if (field === 'password') {
-//       setShowPassword(!showPassword);
-//     } else if (field === 'confirmPassword') {
-//       setShowConfirmPassword(!showConfirmPassword);
-//     }
-//   };
-
-//   const handleInputChange = (event) => {
-//     const { name, value, type, checked } = event.target;
-//     setFormData((prevData) => ({
-//       ...prevData,
-//       [name]: type === 'checkbox' ? checked : value,
-//     }));
-//     console.log(formData);
-//   };
-
-//   const isSignUpDisabled = !formData.firstname || !formData.lastname || 
-//   !formData.email || !formData.password || !formData.confirmPassword || !formData.privacyPolicy;
-
-//   const handleSignUp = async () => {
-//     try {
-//       // Prepare user registration data
-//       const userData = {
-//         firstname: formData.firstname,
-//         lastname: formData.lastname,
-//         email: formData.email,
-//         password: formData.password,
-//       };
-  
-//       // Send a POST request to the registration endpoint
-//       const response = await fetch('http://localhost:4000/auth/register', {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify(userData),
-//       });
-  
-//       // Handle the response
-//       if (response.status === 201) {
-//         // User registered successfully
-//         const data = await response.json();
-//         // Handle the response data (e.g., store user token, redirect, etc.)
-//         console.log('User registered:', data);
-  
-//         // Assuming you want to navigate to a dashboard after successful registration
-//         navigate("/dashboard");
-//       } else {
-//         // Registration failed
-//         const errorData = await response.json();
-//         console.error('Registration error:', errorData.message);
-//       }
-//     } catch (error) {
-//       console.error('Error registering user:', error);
-//     }
-//   };
-
-    
-//   return (
-//     <div className="signup-form">
-//       <h2 style={{textAlign:'center'}} className="app-title ">SwiftPark</h2>
-//       <label>Firstname</label><br></br>
-//       <input type="text" name="firstname" placeholder="Firstname" onChange={handleInputChange} /><br></br>
-//       <label>Lastname</label><br></br>
-//       <input type="text" name="lastname" placeholder="Lastname" onChange={handleInputChange} /><br></br>
-//       <label>Email</label><br></br>
-//       <input type="email" name="email" placeholder="Email" onChange={handleInputChange} /><br></br>
-//       <label>Password</label><br></br>
-//       <div className="password-input">
-//         <input 
-//           type={showPassword ? 'text' : 'password'} 
-//           name="password"
-//           placeholder="Password" 
-//           onChange={handleInputChange}
-//         />
-//         <i
-//           // className={`password-icon ${showPassword ? 'visible' : ''}`}
-//           className='password-icon'
-//           onClick={() => handlePasswordVisibility('password')}
-//           >
-//             <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} />
-//         </i>
-//       </div>
-//       <label>Confirm Password</label>
-//       <div className="password-input">
-//         <input 
-//           type={showConfirmPassword ? 'text' : 'password'} 
-//           name="confirmPassword"
-//           placeholder="Confirm Password" 
-//           onChange={handleInputChange}/>
-//         <i
-//           // className={`password-icon ${showConfirmPassword ? 'visible' : ''}`}
-//           className='password-icon'
-//           onClick={() =>handlePasswordVisibility('confirmPassword')}
-//           >
-//            <FontAwesomeIcon icon={showConfirmPassword ? faEye : faEyeSlash} /> 
-//         </i>
-//       </div>
-//       <br></br>
-//       <div className="privacy-policy">
-//         <label className="checkbox-label" htmlFor="privacyPolicy">
-//         I Agree with <Link to="/privacy-policy">Privacy and Policy</Link>
-//           <input 
-//             type="checkbox" 
-//             id="privacyPolicy"
-//             name="privacyPolicy"
-//             checked={formData.privacyPolicy}
-//             onChange={handleInputChange}
-//           />
-          
-//         </label>
-//       </div>
-//       <button className="signup-button" onClick={handleSignUp} 
-//       disabled={isSignUpDisabled}>
-//         <Link style={{textDecoration:'none', color:'black'}} to="/dashboard">Sign Up</Link>
-//       </button>
-//       <div className="signup-options">
-//         <p>or</p>
-//         <button className="google-signup">Sign Up with Google</button>
-//         <p className="login-link" onClick={switchToLogin}>I'm a member.<a style={{textDecoration:'none', color:'black'}} href="#">Log in</a></p>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default SignUpForm;
-
-
-
-
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
@@ -212,8 +60,8 @@ const SignUpForm = ({switchToLogin, onSubmit}) => {
     }
   };
 
-  const handleSignUp = async() => {
     // Handle signup logic here
+  const handleSignUp = async() => {
     try{
       const response= await axios.post('http://localhost:4000/auth/register', {
          firstname:firstname, 
@@ -302,8 +150,6 @@ const SignUpForm = ({switchToLogin, onSubmit}) => {
         Sign Up
       </button>
       </Link>
-      <p>or</p>
-      <button className="google-login">Sign Up with Google</button>
       <p className="signup-link">
         <a style={{textDecoration:'none', color:'black'}} href="#"
         onClick={switchToLogin}>I'm a member.Login</a>

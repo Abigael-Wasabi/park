@@ -8,20 +8,14 @@ import NavBar from '../layouts/navbar';
 const CompContainer =()=>{
     return (  
       <div className="container">
-        <div className="row">
-
-          <div className="col-sm-4 pop-up">
-            <Booking />
-          </div>
-
-          <div className="col-sm-4 pop-up">
-            <Parking />
-          </div>
-
-          <div className="col-sm-4 pop-up">
-            <RequestRide />
-          </div>
-          
+        <div className="row pop-up">
+        <Booking />
+        </div>
+        <div className="row pop-up">
+        <Parking />
+        </div>
+        <div className="row pop-up">
+        <RequestRide />
         </div>
         <FooTer/>
         <NavBar/>

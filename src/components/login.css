@@ -1,13 +1,13 @@
 .LoginForm{
-  font-family: cursive;
   margin: 0 auto;
-  width: 600px;
-  height: 620px;
+  width: 400px;
+  height: 740px;
   color: rgb(0, 0, 0);
-  border: 1px solid #ccc;
-  border-radius: 5%;
-  box-shadow: 2px 2px 2px burlywood;
-  background-color:rgba(222,184,135,0.5) ;
+  /* border: 1px solid #ccc; */
+  /* box-shadow: 2px 2px 2px burlywood; */
+  /* background-color:rgba(0, 0, 0, 0.5); */
+  justify-content: center;
+  align-items: center;
 }
 
 input{
@@ -29,15 +29,7 @@ input{
 
 }
 
-.google-login{
-  width: 200px;
-  height: 40px;
-  border: 1px solid salmon;
-  border-radius: 40px;
-  background-color: transparent;
-  margin-left: 200px;
-  margin-bottom: 10px;
-}
+
 p{
   text-align: center;
 }
@@ -57,10 +49,24 @@ a{
   padding-right: 30px;
 }
 
-.password-icon {
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  cursor: pointer;
+
+
+/* CSS classes for animation */
+
+.form-container {
+  transition: all 0.3s ease; /* You can adjust the duration as needed */
 }
+
+/* Animation for sliding forms */
+.slide-left {
+  transform: translateX(-100%);
+}
+
+.slide-right {
+  transform: translateX(100%);
+}
+
+/* .blank-column {
+  background-color:blue;
+  height:740px;
+} */

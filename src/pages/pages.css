@@ -1,4 +1,9 @@
-/* Modal Styles */
+/*
+*
+CONTAINS CSS FOR PAGES
+*
+*/
+
 .modal {
     display: flex;
     align-items: center;
@@ -28,34 +33,3 @@
     font-size: 20px;
     cursor: pointer;
 }
-
-.amodal {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-}
-
-.amodal-content {
-    background-color:pink;
-    height: 700px;
-    width: 600px;
-    /* max-width: 400px; */
-    /* margin: 100px auto; */
-    padding: 20px;
-    border-radius: 5px;
-    position: relative;
-}
-
-.paragraph{
-    font-size:14px;
-    font-weight: normal;
-}
-/* Add any additional CSS styling you need here */
-
-/* Hide modal initially */

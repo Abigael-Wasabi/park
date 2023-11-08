@@ -1,12 +1,11 @@
-.parking{
+ .paking{
     padding:20px;
-    border: 1px solid #ccc;
+    /* border: 1px solid #ccc; */
     border-radius:5%;
-    box-shadow: 2px 2px 2px burlywood;
+    /* box-shadow: 2px 2px 2px burlywood; */
     height: 900px;
     width: 600px;
-    background-color:rgba(222, 184, 135,0.5);
-    font-family:cursive;
+    /* background-color:rgba(222, 184, 135,0.5); */
   } 
   input{
     width: 100%;
