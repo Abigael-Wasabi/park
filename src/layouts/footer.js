@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-const FooTer = () =>{
-    return(  
-      <footer className="footer fixed-bottom ">         
-      <div style={{backgroundColor:'salmon', color:'black', marginBottom:'0px'}} className="row justify-content-center">
-        <p className="copyright">&copy; 2023 SwiftPark. All Rights Reserved.</p>
-      </div>
-    </footer>
-    );
+const Footer = () => {
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+  useEffect(() => {
+    setCurrentYear(new Date().getFullYear());
+  }, []);
+
+  return (
+    <div className="row justify-content-center footer">
+      <p style={{}}>&copy; {currentYear} SwiftPark. All Rights Reserved.</p>
+    </div>
+  );
 };
 
-export default FooTer;
+export default Footer;

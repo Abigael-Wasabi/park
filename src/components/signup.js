@@ -8,8 +8,8 @@ import './signup.css';
 // eslint-disable-next-line jsx-a11y/anchor-is-valid
 
 // const SignUpForm = ({switchToLogin}) => {
-const SignUpForm = ({switchToLogin, onSubmit}) => {
-  const navigate = useNavigate();//Initialize useNavigate //navigate("/dashboard")
+const SignUpForm = ({switchToLogin}) => {
+  const navigate = useNavigate();//Initialize useNavigate //navigate("/login")
   const [firstname, setFirstname] = useState('');
   const [lastname, setLastname] = useState('');
   const [email, setEmail] = useState('');
@@ -18,31 +18,48 @@ const SignUpForm = ({switchToLogin, onSubmit}) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
+
 
   const handleFirstnameChange = (event) =>{
     setFirstname(event.target.value);
     updateButtonState(event.target.value, lastname, email, password, confirmPassword);
-  }
+  };
 
   const handleLastnameChange = (event) =>{
     setLastname(event.target.value);
     updateButtonState(firstname, event.target.value, email, password, confirmPassword);
-  }
+  };
 
   const handleEmailChange = (event) =>{
     setEmail(event.target.value);
     updateButtonState(firstname,lastname, event.target.value, password, confirmPassword);
-  }
+  };
 
   const handlePasswordChange = (event) =>{
     setPassword(event.target.value);
     updateButtonState(firstname, lastname, email, event.target.value, confirmPassword);
-  }
+  };
+
+  const isNameValid = (name) => {
+    const nameRegex = /^[a-zA-Z]+$/;
+    return nameRegex.test(name);
+  };
+
+  const isEmailValid = (email) => {
+    const emailRegex = /^[^\s@]+@(gmail\.com|yahoo\.com)$/i;
+    return emailRegex.test(email);
+  };
+
+  const isPasswordValid = (password) => {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return passwordRegex.test(password);
+  };
 
   const handleConfirmPasswordChange = (event) =>{
     setConfirmPassword(event.target.value);
     updateButtonState( firstname,lastname, email, password, event.target.value);
-  }
+  };
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -63,20 +80,42 @@ const SignUpForm = ({switchToLogin, onSubmit}) => {
     // Handle signup logic here
   const handleSignUp = async() => {
     try{
-      const response= await axios.post('http://localhost:4000/auth/register', {
+      const response= await axios.post('http://localhost:4000/user/signup', {
          firstname:firstname, 
          lastname:lastname, 
          email:email, 
          password:password,
          confirmPassword:confirmPassword,
          });
-         //handle the response from the server
-         console.log(response.data);
-         navigate("/dashboard");
+
+         if (!isNameValid(firstname) || !isNameValid(lastname)) {
+          console.log("Invalid firstname or lastname.");
+          return;
+        }
+         if (!isEmailValid(email)) {
+          console.log("Invalid email address");
+          return;
+        }
+         if (password !== confirmPassword) {
+          console.log("Passwords do not match");
+          return;
+        }
+         if (!isPasswordValid(password)) {
+          console.log("Password does not meet complexity requirements");
+          return;
+        }
+         console.log(response.data);//response from the server
+         navigate("/login");
       }catch(err){
-        console.log(err.message);
-    }
-  };
+        if (err.response && err.response.status === 400) {
+          setErrorMessage('User with email ${email} already exists');
+          console.log(err.response.data.message);}
+        else {
+          setErrorMessage('An error occurred. Please try again later.');}
+          console.log(err.message);} 
+        finally {
+          updateButtonState(email, password, errorMessage);}
+        };
 
   return (
     <div className="SignUpForm">
@@ -136,23 +175,35 @@ const SignUpForm = ({switchToLogin, onSubmit}) => {
        </i>
       </div>
       <br></br>
+      <div style={{ color: 'red', textAlign: 'center' }}>{errorMessage}</div>
 
       <label className="checkbox-label" htmlFor="privacyPolicy">
       <input
        type="checkbox"/>
        <a style={{textDecoration:'none', color: 'black'}} href="#">I Agree With Privacy and Policy</a>
       </label><br></br>
-       
-      <Link style={{textDecoration:'none', color:'black'}} to="/dashboard">
-      <button
-        onClick={handleSignUp}
-        disabled={isButtonDisabled}>
-        Sign Up
-      </button>
+
+      <Link
+        style={{ textDecoration: "none", color: "black" }} to="/login"
+        onClick={
+          isPasswordValid(password) && 
+          password === confirmPassword && 
+          isEmailValid(email) && 
+          isNameValid(firstname) &&
+          isNameValid(lastname) ? handleSignUp : null}>
+        <button disabled={
+          !isPasswordValid(password) || 
+          password !== confirmPassword || 
+          !isEmailValid(email) ||
+          !isNameValid(firstname) ||
+          !isNameValid(lastname) ||
+          isButtonDisabled}>Sign Up</button>
       </Link>
+      
+
       <p className="signup-link">
-        <a style={{textDecoration:'none', color:'black'}} href="#"
-        onClick={switchToLogin}>I'm a member.Login</a>
+        <Link style={{textDecoration:'none', color:'black'}} to="/login"
+        onClick={switchToLogin}>I'm a member.Login</Link>
       </p>
     </div>
   );

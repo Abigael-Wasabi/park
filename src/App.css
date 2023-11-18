@@ -50,7 +50,7 @@ CONTAINS CSS FOR PAGES
 
 
 .app-background {
-  /* background-image: url('/src/assets/b7ab8a4a1e1836c58143db553a6cce5c.jpg');  */
+  background-image: url('/src/assets/summer.jpeg'); 
   background-size: cover;
   background-repeat: no-repeat; /*aspect ratio*/
   min-height: 100vh;
@@ -69,17 +69,17 @@ CONTAINS CSS FOR PAGES
   margin-bottom:30px;
 }
 
-/* .booking{
+.booking{
   background-color:#CEA492; 
-} */
+} 
 
-/* .parking{
+.parking{
   background-color: #76615A;
-} */
+}
 
-/* .request-ride{
+.request-ride{
   background-color: #9F9490;
-} */
+}
 
 .pop-up {
   transition: transform 0.2s, box-shadow 0.2s;
@@ -91,8 +91,11 @@ CONTAINS CSS FOR PAGES
 
 .footer {
   text-align: center;
-  color: salmon;
   padding: 6px;
+  color:salmon;
   position: fixed;
+  margin-bottom: 0px;
+  bottom: 0;
+  width: 100%;
 }
 

@@ -11,9 +11,9 @@ CONTAINS CSS FOR SIGN UP FORM
   width: 400px;
   height: 740px;
   color: rgb(0, 0, 0);
-  /* border: 1px solid #ccc; */
-  /* box-shadow: 2px 2px 2px burlywood; */
-  /* background-color: rgba(0, 0, 0, 0.5); */
+  border: 1px solid #ccc;
+  box-shadow: 2px 2px 2px burlywood;
+  background-color: rgba(222, 184, 135, 0.5);
 }
 
 input{
@@ -29,9 +29,8 @@ button {
   border: 1px solid salmon;
   border-radius: 40px;
   background-color: transparent;
-  margin-left: 200px;
-  margin-bottom: 10px;
-
+  margin: 50px auto 10px;
+  display: block;
 }
 p{
   text-align: center;
