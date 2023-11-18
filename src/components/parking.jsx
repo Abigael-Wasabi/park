@@ -1,21 +1,244 @@
+// import React, { useState } from 'react';
+// import 'bootstrap/dist/css/bootstrap.min.css';
+// import { Modal, Button } from 'react-bootstrap'; 
+// import axios from 'axios';
+// import NavBar from '../layouts/navbar';
+// import FooTer from '../layouts/footer';
+// import './booking.css';
+// import MpesaPaymentModal from './mpesa';
+
+// function Boking() {
+//   //current state value, Function to update the current state value, Hook used to track state, Function calling 
+//   const [arrivalTime, setArrivalTime] = useState('');
+//   const [departureTime, setDepartureTime] = useState('');
+//   const [carType, setCarType] = useState('');
+//   const [registrationNumber, setRegistrationNumber] = useState('');
+//   const [allocatedSlot,setAllocatedSlot] = useState(null);
+//   const [availableSlots, setAvailableSlots] = useState(null);
+//   const [allFieldsFilled, setAllFieldsFilled] = useState(false);
+//   const [alertMessage, setAlertMessage] = useState('');
+//   const [showMpesaModal, setShowMpesaModal] = useState(false);
+//   const [isPaymentMade, setIsPaymentMade] = useState(false);
+//   const [calculatedAmount, setCalculatedAmount] = useState(0);
+  
+
+//   //event handling function
+//   const openMpesaModal = (calculatedAmount) => {
+//     setCalculatedAmount(calculatedAmount); // Add this state variable
+//     setShowMpesaModal(true);
+//   };
+
+//   const closeMpesaModal = () => {
+//     setShowMpesaModal(false);
+//   };
+//   const handlePaymentSuccess = () => {
+//     setIsPaymentMade(true);
+//   };
+
+//   const handleArrivalTimeChange = (event) => {
+//     setArrivalTime(event.target.value);
+//     checkAllFieldsFilled();
+//   };
+
+//   const handleDepartureTimeChange = (event) => {
+//     setDepartureTime(event.target.value);
+//     checkAllFieldsFilled();
+//   };
+
+//   const handleCarTypeChange = (event) => {
+//     setCarType(event.target.value);
+//     checkAllFieldsFilled();
+//   };
+
+//   const handleRegistrationNumberChange = (event) => {
+//     setRegistrationNumber(event.target.value);
+//     checkAllFieldsFilled();
+//   };
+
+  
+  
+
+//   const checkAllFieldsFilled = () => {
+//     const allFieldsFilled =
+//       arrivalTime !== '' &&
+//       departureTime !== '' &&
+//       carType !== '' &&
+//       registrationNumber !== '';
+//     setAllFieldsFilled(allFieldsFilled);
+//   };
+
+//   const checkAvailability = async () => {
+//     try {
+//       const response = await axios.get('http://localhost:4000/car/checkAvailableSlots');
+//       setAvailableSlots(response.data.availableSlots);
+//     } catch (error) {
+//       console.error('Error checking availability:', error);
+//     }
+//   };
+
+//   const allocateSlot = async () => {
+//     try {
+//       const response = await axios.get('http://localhost:4000/car/allocateRandomSlot', {
+//         params: {
+//           carType: carType,
+//         }, 
+//       });
+//       setAllocatedSlot(response.data.parkingSlot.parkingSlotNumber);
+//     } catch (error) {
+//       console.error('Error allocating slot:', error);
+//     }
+//   };
+
+//   const enterParkingDetails = async () => {
+//     try{
+//       const response= await axios.post('http://localhost:4000/car/enterParkingDetails', {
+//          arrivalTime:arrivalTime, 
+//          departureTime:departureTime,
+//          carType:carType, 
+//          registrationNumber:registrationNumber,
+//          });
+//          console.log(response.data);
+//          if (response.data.message === 'Parking details entered successfully.') {
+//           setAlertMessage('Parking details entered successfully.');
+
+//           const serverCalculatedAmount = response.data.parkingFee;
+//           openMpesaModal(serverCalculatedAmount); 
+//         } else {
+//           setAlertMessage('Error entering parking details.');
+//         }
+//       } catch (error) {
+//         console.log('Error entering parking details:', error);
+//         setAlertMessage('Error entering parking details.');
+//       }
+//     };
+  
+//   return (
+//       <div className='container boking'>
+//         <h3 style={{ textAlign: 'center', fontSize: '15px' }}>find your spot, park on the dot</h3>
+        
+//         <label>Arrival Time</label><br />
+//         <input 
+//         type="time" 
+//         value={arrivalTime} 
+//         onChange={handleArrivalTimeChange} /><br />
+
+//         <label>Departure Time</label><br />
+//         <input type="time" 
+//         value={departureTime} 
+//         onChange={handleDepartureTimeChange} /><br />
+
+//         <label>Car Type</label><br />
+//         <select value={carType} onChange={handleCarTypeChange}>
+//           <option value="">Select Car Type</option>
+//           <option value="2 wheeler">2 wheeler</option>
+//           <option value="4 wheeler">4 wheeler</option>
+//           <option value="4+ wheeler">4+ wheeler</option>
+//         </select><br />
+
+//         <label>Registration Number</label><br />
+//         <input type="text" value={registrationNumber} onChange={handleRegistrationNumberChange} /><br />
+
+//         <button
+//          style={{ width: '100%', marginLeft: '0px' }}
+//          onClick={checkAvailability}>Check Availability
+//         </button>
+//         {availableSlots !== null && <h6 style={{ textAlign: 'center', fontSize: '16px', fontWeight: 'normal' }}>Available Slots: {availableSlots}</h6>}
+
+//         <Button
+//           style={{ width: '100%', marginLeft: '0px' }}
+//           onClick={openMpesaModal}
+//           disabled={isPaymentMade}>Parking Fee
+//         </Button>
+
+//         <Modal show={showMpesaModal} onHide={closeMpesaModal}>
+//         <Modal.Header closeButton>
+//           <Modal.Title>Mpesa Payment</Modal.Title>
+//         </Modal.Header>
+//         <Modal.Body>
+//           <MpesaPaymentModal
+//             calculatedAmount={calculatedAmount}
+//             onClose={closeMpesaModal}
+//             onPaymentSuccess={handlePaymentSuccess}/>
+//         </Modal.Body>
+//         </Modal>
+
+//         <button
+//           style={{ width: '100%', marginLeft: '0px' }}
+//           onClick={enterParkingDetails}
+//           disabled={!allFieldsFilled}>Submit
+//         </button>
+
+//         <div style={{ textAlign: 'center', fontSize: '16px', fontWeight: 'normal', marginTop: '10px' }}>
+//           {alertMessage}
+//         </div>
+
+//         <button
+//           style={{ width: '100%', marginLeft: '0px' }}
+//           onClick={allocateSlot}
+//           disabled={!allFieldsFilled}>Hold a Spot
+//         </button>
+
+//         {allocatedSlot !== null && <h6 style={{textAlign:'center', fontSize: '16px', fontWeight: 'normal'}}>Allocated Slot: {allocatedSlot}</h6>}
+
+//         <NavBar />
+//         <FooTer />
+//       </div>
+//   );
+// }
+
+// export default Boking;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Modal } from 'react-bootstrap'; 
 import axios from 'axios';
 import NavBar from '../layouts/navbar';
-import FooTer from '../layouts/footer';
+// import FooTer from '../layouts/footer';
 import './booking.css';
+import MpesaPaymentModal from './mpesa';
 
 function Boking() {
-  //current state value, Function to update the current state value, Hook used to track state, Function calling 
   const [arrivalTime, setArrivalTime] = useState('');
   const [departureTime, setDepartureTime] = useState('');
   const [carType, setCarType] = useState('');
   const [registrationNumber, setRegistrationNumber] = useState('');
-  const [allocatedSlot,setAllocatedSlot] = useState(null);
+  const [allocatedSlot, setAllocatedSlot] = useState(null);
   const [availableSlots, setAvailableSlots] = useState(null);
   const [allFieldsFilled, setAllFieldsFilled] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [showMpesaModal, setShowMpesaModal] = useState(false);
+  const [isPaymentMade, setIsPaymentMade] = useState(false);
+  const [calculatedAmount, setCalculatedAmount] = useState(0);
 
-  //event handling function
+  const openMpesaModal = (calculatedAmount) => {
+    setCalculatedAmount(calculatedAmount);
+    setShowMpesaModal(true);
+  };
+
+  const closeMpesaModal = () => {
+    setShowMpesaModal(false);
+  };
+
+  const handlePaymentSuccess = () => {
+    setIsPaymentMade(true);
+  };
+
   const handleArrivalTimeChange = (event) => {
     setArrivalTime(event.target.value);
     checkAllFieldsFilled();
@@ -34,7 +257,7 @@ function Boking() {
   const handleRegistrationNumberChange = (event) => {
     setRegistrationNumber(event.target.value);
     checkAllFieldsFilled();
-  }
+  };
 
   const checkAllFieldsFilled = () => {
     const allFieldsFilled =
@@ -48,7 +271,7 @@ function Boking() {
   const checkAvailability = async () => {
     try {
       const response = await axios.get('http://localhost:4000/car/checkAvailableSlots');
-      setAvailableSlots(response.data.availableSlots);
+      setAvailableSlots(response.data.availableSlotsCount);
     } catch (error) {
       console.error('Error checking availability:', error);
     }
@@ -59,7 +282,7 @@ function Boking() {
       const response = await axios.get('http://localhost:4000/car/allocateRandomSlot', {
         params: {
           carType: carType,
-        }, 
+        },
       });
       setAllocatedSlot(response.data.parkingSlot.parkingSlotNumber);
     } catch (error) {
@@ -68,68 +291,94 @@ function Boking() {
   };
 
   const enterParkingDetails = async () => {
-    try{
-      const response= await axios.post('http://localhost:4000/car/enterParkingDetails', {
-         arrivalTime:arrivalTime, 
-         departureTime:departureTime,
-         carType:carType, 
-         registrationNumber:registrationNumber,
-         });
-         //handle the response from the server
-         console.log(response.data);
-      }catch(error){
-        console.log('Error entering parking details:',error);
+    try {
+      const response = await axios.post('http://localhost:4000/car/enterParkingDetails', {
+        arrivalTime: arrivalTime,
+        departureTime: departureTime,
+        carType: carType,
+        registrationNumber: registrationNumber,
+      });
+      console.log(response.data);
+      if (response.data.message === 'Parking details entered successfully.') {
+        setAlertMessage('Parking details entered successfully.');
+        const serverCalculatedAmount = response.data.parkingFee;
+        setCalculatedAmount(serverCalculatedAmount);
+        setShowMpesaModal(true); // Open the Mpesa modal after successful details submission
+      } else {
+        setAlertMessage('Error entering parking details.');
+      }
+    } catch (error) {
+      console.log('Error entering parking details:', error);
+      setAlertMessage('Error entering parking details.');
     }
   };
-  
+
   return (
-      <div className='container boking'>
-        <h3 style={{ textAlign: 'center', fontSize: '15px' }}>find your spot, park on the dot</h3>
-        
-        <label>Arrival Time</label><br />
-        <input 
-        type="time" 
-        value={arrivalTime} 
+    <div className='container booking'>
+      <h3 style={{ textAlign: 'center', fontSize: '15px' }}>find your spot, park on the dot</h3>
+
+      <label>Arrival Time</label><br />
+      <input
+        type="time"
+        value={arrivalTime}
         onChange={handleArrivalTimeChange} /><br />
 
-        <label>Departure Time</label><br />
-        <input type="time" 
-        value={departureTime} 
+      <label>Departure Time</label><br />
+      <input
+        type="time"
+        value={departureTime}
         onChange={handleDepartureTimeChange} /><br />
 
-        <label>Car Type</label><br />
-        <select value={carType} onChange={handleCarTypeChange}>
-          <option value="">Select Car Type</option>
-          <option value="2 wheeler">2 wheeler</option>
-          <option value="4 wheeler">4 wheeler</option>
-          <option value="4+ wheeler">4+ wheeler</option>
-        </select><br />
+      <label>Car Type</label><br />
+      <select value={carType} onChange={handleCarTypeChange}>
+        <option value="">Select Car Type</option>
+        <option value="2 wheeler">2 wheeler</option>
+        <option value="4 wheeler">4 wheeler</option>
+        <option value="4+ wheeler">4+ wheeler</option>
+      </select><br />
 
-        <label>Registration Number</label><br />
-        <input type="text" value={registrationNumber} onChange={handleRegistrationNumberChange} /><br />
+      <label>Registration Number</label><br />
+      <input type="text" value={registrationNumber} onChange={handleRegistrationNumberChange} /><br />
 
-        <button
-         style={{ width: '100%', marginLeft: '0px' }}
-         onClick={checkAvailability}>Check Availability
-        </button>
-        {availableSlots !== null && <h6 style={{ textAlign: 'center', fontSize: '16px', fontWeight: 'normal' }}>Available Slots: {availableSlots}</h6>}
+      <button
+        style={{ width: '100%', marginLeft: '0px' }}
+        onClick={checkAvailability}>Check Availability
+      </button>
+      {availableSlots !== null && <h6 style={{ textAlign: 'center', fontSize: '16px', fontWeight: 'normal' }}>Available Slots: {availableSlots}</h6>}
 
-        <button
-          style={{ width: '100%', marginLeft: '0px' }}
-          onClick={enterParkingDetails}
-          disabled={!allFieldsFilled}>Submit
-        </button>
+      <button
+        style={{ width: '100%', marginLeft: '0px' }}
+        onClick={enterParkingDetails}
+        disabled={!allFieldsFilled || isPaymentMade}>Submit
+      </button>
 
-        <button
-          style={{ width: '100%', marginLeft: '0px' }}
-          onClick={allocateSlot}
-          disabled={!allFieldsFilled}>Hold a Spot
-        </button>
-        {allocatedSlot !== null && <h6 style={{textAlign:'center', fontSize: '16px', fontWeight: 'normal'}}>Allocated Slot: {allocatedSlot}</h6>}
-
-        <NavBar />
-        <FooTer />
+      <div style={{ textAlign: 'center', fontSize: '16px', fontWeight: 'normal', marginTop: '10px' }}>
+        {alertMessage}
       </div>
+
+      <button
+        style={{ width: '100%', marginLeft: '0px' }}
+        onClick={allocateSlot}
+        disabled={!allFieldsFilled}>Hold a Spot
+      </button>
+
+      {allocatedSlot !== null && <h6 style={{ textAlign: 'center', fontSize: '16px', fontWeight: 'normal' }}>Allocated Slot: {allocatedSlot}</h6>}
+
+      <Modal show={showMpesaModal} onHide={closeMpesaModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Mpesa Payment</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <MpesaPaymentModal
+            calculatedAmount={calculatedAmount}
+            onClose={closeMpesaModal}
+            onPaymentSuccess={handlePaymentSuccess} />
+        </Modal.Body>
+      </Modal>
+
+      <NavBar />
+      {/* <FooTer /> */}
+    </div>
   );
 }
 

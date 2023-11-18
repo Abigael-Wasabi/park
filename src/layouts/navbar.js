@@ -21,7 +21,7 @@ const NavBar =()=>{
           <div className="container fixed-top">
             <Nav.Link disabled>SwiftPark</Nav.Link>
             <Link style={{textDecoration:'none', color:'black'}} to="/">Home</Link>
-            <Link style={{textDecoration:'none', color:'black'}} to="/">About</Link>            
+            <Link style={{textDecoration:'none', color:'black'}} to="/about">About</Link>            
             <Link style={{textDecoration:'none', color:'black'}} to="/dashboard">Services</Link>
             <Nav.Link href="#">Contact</Nav.Link>
             <Nav.Link href="#">Settings</Nav.Link>

@@ -1,10 +1,101 @@
-import React from 'react';
+import React, { useState,useEffect} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useNavigate} from 'react-router-dom';
+import axios from 'axios';
 import './pages.css';
 
 function Profile({showModal, closeModal}) {
-  const handleCloseModal = () => {
-    closeModal();
+const navigate = useNavigate();
+const [firstname, setFirstname] = useState('');
+const [lastname,setLastname]=useState('');
+const [email,setEmail]=useState('');
+const [password,setPassword]=useState('');
+const [session,setSession]=useState('booked');//default value
+
+const handleCloseModal = () => {
+  closeModal();
+};
+
+useEffect(() => {
+  const fetchUserDetails = async () => {
+    try {
+      const storedTokenKey = localStorage.getItem('userID');
+      const response = await axios.get('http://localhost:4000/user/profile', {
+        headers: {
+          Authorization: `Bearer ${storedTokenKey}`, //actual token retrieval logic
+        },
+      });
+
+      const userData = response.data.user; 
+      setFirstname(userData.firstname);
+      setLastname(userData.lastname);
+      setEmail(userData.email);
+      setPassword(userData.password);
+      setSession(userData.session);
+      console.log('Stored Token:', storedTokenKey);
+    } catch (error) {
+      console.error('Error fetching user details:', error);
+    }
+  };
+
+  fetchUserDetails();
+}, []); // Empty dependency array ensures this effect runs once when the component mounts
+
+//event handling funcs
+const handleFirstnameChange = (event) => {
+  setFirstname(event.target.value);
+};
+
+const handleLastnameChange = (event) => {
+  setLastname(event.target.value);
+};
+
+const handleEmailChange = (event) => {
+  setEmail(event.target.value);
+};
+
+const handlePasswordChange = (event) => {
+  setPassword(event.target.value);
+};
+
+const handleSessionChange = (event) => {
+  setSession(event.target.value);
+};
+
+const handleEditProfile = async () => {
+  try {
+    const storedTokenKey = localStorage.getItem('yourStoredTokenKey');
+    const response = await axios.put('http://localhost:4000/user/editProfile', {
+      firstname,lastname,email,password,session,},
+      {
+        headers: {
+          Authorization: `Bearer ${storedTokenKey}`,
+        },});
+    console.log(response.data);
+    alert('Profile update successful');
+  }catch (error) {
+    console.error('Error updating user details:', error);
+    alert('error updating profile');
+  }};
+
+  const handleReservationCancelling = async () => {
+    try {
+      const response = await axios.delete('http://localhost:4000/car/cancelReservation');
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      const response = await axios.delete('http://localhost:4000/user/logout');
+      localStorage.removeItem('userID');
+      console.log(response.data);
+      navigate('/');
+    } catch (err) {
+      console.log(err.message);
+    }
   };
 
   return (
@@ -14,23 +105,27 @@ function Profile({showModal, closeModal}) {
             <span className="close" onClick={handleCloseModal}>&times;</span>
             <h2>Edit Profile</h2>
             <form>
-              <label htmlFor="fullname">Full Name:</label>
-              <input type="text" id="fullname" name="fullname" required /><br />
+              <label htmlFor="firstname">Firstname:</label>
+              <input type="text" id="firstname" value={firstname} onChange={handleFirstnameChange}/><br />
+
+              <label htmlFor="lastname">Lastname:</label>
+              <input type="text" id="lastname" value={lastname} onChange={handleLastnameChange}/><br />
 
               <label htmlFor="email">Email:</label>
-              <input type="email" id="email" name="email" required /><br />
+              <input type="email" id="email" value={email} onChange={handleEmailChange}/><br />
 
               <label htmlFor="password">Password:</label>
-              <input type="password" id="password" name="password" required /><br />
+              <input type="password" id="password" value={password} onChange={handlePasswordChange}/><br />
 
               <label htmlFor="session">Session:</label>
-              <select id="session" name="session">
-                <option value="booked">Booked</option>
-                <option value="parked">Parked</option>
-              </select><br />
-
-              <button style={{marginLeft:'10px', width:'100px'}} type="button" id="edit-btn">Edit</button>
-              <button style={{ width:'100px'}} type="button" id="logout-btn">Logout</button>
+              <input type="text" id="session" value={session} onChange={handleSessionChange}/><br/>
+ 
+              <button style={{marginLeft:'10px', width:'100px'}} type="button"
+              onClick={handleEditProfile}>Edit</button>
+              <button style={{marginLeft:'10px', width:'100px'}} type="button"
+              onClick={handleReservationCancelling}>Cancel Reservation</button>
+              <button style={{ width:'100px'}} type="button"
+              onClick={handleLogout}>Logout</button>
             </form>
           </div>
         </div>

@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import './login.css'
 
-const LoginForm= ({switchToSignUp}) => {
+const LoginForm= () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -36,26 +36,34 @@ const LoginForm= ({switchToSignUp}) => {
     }
   };
 
-   // Handle login logic here
+   //login logic
   const handleLogin = async() => {
     try{
-      const response= await axios.post('http://localhost:4000/auth/login',{
+      const response= await axios.post('http://localhost:4000/user/login',{
         email:email,
         password:password,
     });
     console.log(response.data);
+    localStorage.setItem('userID', response.data.userID);//Stored in local storage
+    setErrorMessage('');
     navigate("/dashboard");
   }catch(err){
     if (err.response && err.response.status === 404) {
       setErrorMessage('User not found.');
     } else if (err.response && err.response.status === 401) {
       setErrorMessage('Incorrect password.');
-    } else {
+    }
+    else {
     setErrorMessage('An error occurred. Please try again later.');
     }
     console.log(err.message);
-  }
-};
+  } finally {
+    updateButtonState(email, password, errorMessage);
+  }};
+
+  
+
+  
 
   return (
     <div style={{marginTop:'50px'}} className="LoginForm">
@@ -83,15 +91,7 @@ const LoginForm= ({switchToSignUp}) => {
       <label className="checkbox-label" htmlFor="rememberMe">
         <input type="checkbox" placeholder="RememberMe"/>Remember Me
       </label><br></br>
-      <Link style={{textDecoration:'none', color:'black'}} to="/dashboard">
-      <button
-        onClick={handleLogin}
-        disabled={isButtonDisabled}>Login
-      </button>
-      </Link>
-      <p className="signup-link" onClick={switchToSignUp}>
-        <a style={{textDecoration:'none', color:'black'}} href="#">I'm new.Sign Up</a>
-      </p>
+      <button onClick={handleLogin} disabled={isButtonDisabled}>Login</button>
     </div>
   );
 };
