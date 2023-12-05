@@ -1,10 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import './login.css'
+import Cookies from 'js-cookie';
 
 const LoginForm= () => {
   const navigate = useNavigate();
@@ -35,15 +37,29 @@ const LoginForm= () => {
       setIsButtonDisabled(true);
     }
   };
+  //!parking UI
 
    //login logic
-  const handleLogin = async() => {
+  const handleLogin = async(event) => {
+    event.preventDefault();
     try{
       const response= await axios.post('http://localhost:4000/user/login',{
         email:email,
         password:password,
-    });
-    console.log(response.data);
+    },
+    { 
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    }
+    );
+    console.log("sertyuihyredtf",response.data);
+
+    if(response.data.userData){
+      const { token } = response.data.userData
+      Cookies.set('token', token);
+    }
+
     localStorage.setItem('userID', response.data.userID);//Stored in local storage
     setErrorMessage('');
     navigate("/dashboard");
@@ -62,21 +78,21 @@ const LoginForm= () => {
   }};
 
   
-
-  
-
   return (
     <div style={{marginTop:'50px'}} className="LoginForm">
-      <label htmlFor="email">Email</label>
+      <h2 style={{textAlign: 'center'}} className="app-title">SwiftPark</h2>
+      <form onSubmit={handleLogin}>
       <input 
        type="text" 
+       placeholder='email'
        name="email"
        value={email} 
-       onChange={handleEmailChange}/><br></br>
-      <label htmlFor="password">Password</label>
+       onChange={handleEmailChange}
+       style={{ '--placeholder-color': 'black' }} /><br></br>
       <div>
       <input
        type={passwordVisible ? 'text': 'password'}
+       placeholder='password'
        name="password"
        value={password}
        onChange={handlePasswordChange}/>
@@ -86,12 +102,10 @@ const LoginForm= () => {
       </div><br></br>
       <div style={{ color: 'red', textAlign: 'center' }}>{errorMessage}</div>
       <div style={{textAlign: 'center',}}className="forgot-password">
-       <a style={{textDecoration: 'none',color:'black'}}href="#">Forgot Password?</a>
+       <Link to="/forgot-password">Forgot Password?</Link>
       </div>
-      <label className="checkbox-label" htmlFor="rememberMe">
-        <input type="checkbox" placeholder="RememberMe"/>Remember Me
-      </label><br></br>
-      <button onClick={handleLogin} disabled={isButtonDisabled}>Login</button>
+      <button type="submit" disabled={isButtonDisabled}>Login</button>
+      </form>
     </div>
   );
 };

@@ -209,11 +209,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal } from 'react-bootstrap'; 
 import axios from 'axios';
 import NavBar from '../layouts/navbar';
-// import FooTer from '../layouts/footer';
+import FooTer from '../layouts/footer';
 import './booking.css';
 import MpesaPaymentModal from './mpesa';
 
-function Boking() {
+function Paking() {
   const [arrivalTime, setArrivalTime] = useState('');
   const [departureTime, setDepartureTime] = useState('');
   const [carType, setCarType] = useState('');
@@ -240,14 +240,26 @@ function Boking() {
   };
 
   const handleArrivalTimeChange = (event) => {
+    const selectedTime = event.target.value;
+    const minTime = "05:00";
+    const maxTime = "22:00";
+  if (selectedTime >= minTime && selectedTime <= maxTime) {
     setArrivalTime(event.target.value);
     checkAllFieldsFilled();
-  };
+  }else{
+    alert("working hours violation");
+  }};
 
   const handleDepartureTimeChange = (event) => {
+    const selectedTime = event.target.value;
+    const minTime = "06:00";
+    const maxTime = "23:00";
+  if (selectedTime >= minTime && selectedTime <= maxTime) {
     setDepartureTime(event.target.value);
     checkAllFieldsFilled();
-  };
+  }else{
+    alert("working hours violation");
+  }};
 
   const handleCarTypeChange = (event) => {
     setCarType(event.target.value);
@@ -270,7 +282,7 @@ function Boking() {
 
   const checkAvailability = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/car/checkAvailableSlots');
+      const response = await axios.get('http://localhost:4000/carp/checkAvailableSlots');
       setAvailableSlots(response.data.availableSlotsCount);
     } catch (error) {
       console.error('Error checking availability:', error);
@@ -279,7 +291,7 @@ function Boking() {
 
   const allocateSlot = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/car/allocateRandomSlot', {
+      const response = await axios.get('http://localhost:4000/carp/allocateRandomSlot', {
         params: {
           carType: carType,
         },
@@ -292,18 +304,21 @@ function Boking() {
 
   const enterParkingDetails = async () => {
     try {
-      const response = await axios.post('http://localhost:4000/car/enterParkingDetails', {
+      console.log('Entering enterParkingDetails function');
+      console.log('Before axios.post');
+      const response = await axios.post('http://localhost:4000/carp/enterParkingDetails', {
         arrivalTime: arrivalTime,
         departureTime: departureTime,
         carType: carType,
         registrationNumber: registrationNumber,
       });
+      console.log('After axios.post');
       console.log(response.data);
       if (response.data.message === 'Parking details entered successfully.') {
         setAlertMessage('Parking details entered successfully.');
         const serverCalculatedAmount = response.data.parkingFee;
         setCalculatedAmount(serverCalculatedAmount);
-        setShowMpesaModal(true); // Open the Mpesa modal after successful details submission
+        setShowMpesaModal(true); // mpesa opens after submitting details
       } else {
         setAlertMessage('Error entering parking details.');
       }
@@ -314,20 +329,28 @@ function Boking() {
   };
 
   return (
-    <div className='container booking'>
+    <div className='container'>
+      <div className='row'>
+      <div className="col-md-2"><NavBar/></div>
+      <div className="col-md-5"><FooTer/></div>
+      <div className="col-md-5 paking">
       <h3 style={{ textAlign: 'center', fontSize: '15px' }}>find your spot, park on the dot</h3>
 
       <label>Arrival Time</label><br />
       <input
         type="time"
         value={arrivalTime}
-        onChange={handleArrivalTimeChange} /><br />
+        onChange={handleArrivalTimeChange}
+        min="05:00"
+        max="22:00" /><br /> 
 
       <label>Departure Time</label><br />
       <input
         type="time"
         value={departureTime}
-        onChange={handleDepartureTimeChange} /><br />
+        onChange={handleDepartureTimeChange}
+        min="06:00"
+        max="23:00" /><br />
 
       <label>Car Type</label><br />
       <select value={carType} onChange={handleCarTypeChange}>
@@ -375,11 +398,10 @@ function Boking() {
             onPaymentSuccess={handlePaymentSuccess} />
         </Modal.Body>
       </Modal>
-
-      <NavBar />
-      {/* <FooTer /> */}
+      </div>
+      </div>
     </div>
   );
 }
 
-export default Boking;
+export default Paking;

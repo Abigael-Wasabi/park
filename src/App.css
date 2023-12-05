@@ -50,7 +50,7 @@ CONTAINS CSS FOR PAGES
 
 
 .app-background {
-  background-image: url('/src/assets/summer.jpeg'); 
+  background-image: url('/src/assets/ppark.webp');
   background-size: cover;
   background-repeat: no-repeat; /*aspect ratio*/
   min-height: 100vh;
@@ -58,7 +58,8 @@ CONTAINS CSS FOR PAGES
   display: flex;
   align-items: center;
   justify-content: center;
-  
+  font-family: cursive;
+  color:black;
 }
 
 .booking, .parking, .request-ride {
@@ -67,6 +68,7 @@ CONTAINS CSS FOR PAGES
   box-shadow: 2px 2px 4px burlywood;
   height: 100px;
   margin-bottom:30px;
+  background-color: gray;
 }
 
 .booking{
@@ -90,12 +92,12 @@ CONTAINS CSS FOR PAGES
 }
 
 .footer {
-  text-align: center;
-  padding: 6px;
-  color:salmon;
+  /* text-align: center; */
+  /* padding: 6px; */
+  /* color:salmon; */
   position: fixed;
   margin-bottom: 0px;
   bottom: 0;
-  width: 100%;
+  /* width: 100%; */
 }
 

@@ -3,11 +3,12 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate} from 'react-router-dom';
+import Tnc from '../layouts/t&c';
+import Footer from '../layouts/footer';
 import axios from 'axios';
 import './signup.css';
 // eslint-disable-next-line jsx-a11y/anchor-is-valid
 
-// const SignUpForm = ({switchToLogin}) => {
 const SignUpForm = ({switchToLogin}) => {
   const navigate = useNavigate();//Initialize useNavigate //navigate("/login")
   const [firstname, setFirstname] = useState('');
@@ -19,8 +20,14 @@ const SignUpForm = ({switchToLogin}) => {
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
-
-
+  const [showModal, setShowModal] = useState(false);
+  const toggleModal =  () => {
+    setShowModal(!showModal);
+  }
+  const closeModal = () => {
+    setShowModal(false);
+  };
+ 
   const handleFirstnameChange = (event) =>{
     setFirstname(event.target.value);
     updateButtonState(event.target.value, lastname, email, password, confirmPassword);
@@ -77,8 +84,9 @@ const SignUpForm = ({switchToLogin}) => {
     }
   };
 
-    // Handle signup logic here
-  const handleSignUp = async() => {
+    //signup logic //API
+  const handleSignUp = async(event) => {
+    event.preventDefault();
     try{
       const response= await axios.post('http://localhost:4000/user/signup', {
          firstname:firstname, 
@@ -108,7 +116,7 @@ const SignUpForm = ({switchToLogin}) => {
          navigate("/login");
       }catch(err){
         if (err.response && err.response.status === 400) {
-          setErrorMessage('User with email ${email} already exists');
+          setErrorMessage(`User with email ${email} already exists`);
           console.log(err.response.data.message);}
         else {
           setErrorMessage('An error occurred. Please try again later.');}
@@ -118,18 +126,18 @@ const SignUpForm = ({switchToLogin}) => {
         };
 
   return (
+    <form onSubmit={handleSignUp}>
     <div className="SignUpForm">
       <h2 style={{textAlign: 'center'}} className="app-title">SwiftPark</h2>
-      <label htmlFor="firstname">Firstname</label><br></br>
       <input 
        type="text"
        placeholder="Firstname"
        id="firstname"
        value={firstname} 
        onChange={handleFirstnameChange}
-       autoComplete="given-name" /><br></br>
+       autoComplete="given-name"
+       style={{ '--placeholder-color': 'black' }} /><br></br>
 
-      <label htmlFor="lastname">Lastname</label><br></br>
       <input 
        type="text"
        placeholder="Lastname"
@@ -138,7 +146,6 @@ const SignUpForm = ({switchToLogin}) => {
        onChange={handleLastnameChange}
        autoComplete="family-name" /><br></br>
 
-      <label htmlFor="email">Email</label><br></br>
 
       <input 
        type="email"
@@ -148,7 +155,6 @@ const SignUpForm = ({switchToLogin}) => {
        onChange={handleEmailChange}
        autoComplete="email" /><br></br>
 
-      <label htmlFor="password">Password</label><br></br>
       <div className="password-input">
        <input
        type={passwordVisible ? "text" : "password"}
@@ -157,12 +163,13 @@ const SignUpForm = ({switchToLogin}) => {
        value={password}
        onChange={handlePasswordChange}
        autoComplete="new-password" />
-       <span onClick={togglePasswordVisibility}>
-        <FontAwesomeIcon icon={passwordVisible ? faEye : faEyeSlash} />
-       </span>
+       <FontAwesomeIcon 
+          icon={passwordVisible ? faEye : faEyeSlash}
+          className="password-icon"
+          onClick={togglePasswordVisibility} />
       </div>
        <br></br>
-      <label htmlFor="confirmPassword">Confirm Password</label><br></br>
+       
       <div className="password-input">
        <input 
        type={confirmPasswordVisible ? "text" : "password"}
@@ -177,11 +184,10 @@ const SignUpForm = ({switchToLogin}) => {
       <br></br>
       <div style={{ color: 'red', textAlign: 'center' }}>{errorMessage}</div>
 
-      <label className="checkbox-label" htmlFor="privacyPolicy">
-      <input
-       type="checkbox"/>
-       <a style={{textDecoration:'none', color: 'black'}} href="#">I Agree With Privacy and Policy</a>
-      </label><br></br>
+      <span onClick={toggleModal} style={{marginLeft:'125px', cursor:'pointer'}}>Terms & Conditions</span>
+      {showModal && <Tnc showModal={showModal} closeModal={closeModal} />}
+
+
 
       <Link
         style={{ textDecoration: "none", color: "black" }} to="/login"
@@ -190,7 +196,7 @@ const SignUpForm = ({switchToLogin}) => {
           password === confirmPassword && 
           isEmailValid(email) && 
           isNameValid(firstname) &&
-          isNameValid(lastname) ? handleSignUp : null}>
+          isNameValid(lastname)}>
         <button disabled={
           !isPasswordValid(password) || 
           password !== confirmPassword || 
@@ -206,6 +212,8 @@ const SignUpForm = ({switchToLogin}) => {
         onClick={switchToLogin}>I'm a member.Login</Link>
       </p>
     </div>
+    <Footer/>
+    </form>
   );
 };
 
