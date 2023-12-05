@@ -7,8 +7,8 @@ const Footer = () => {
   }, []);
 
   return (
-    <div className="row justify-content-center footer">
-      <p style={{}}>&copy; {currentYear} SwiftPark. All Rights Reserved.</p>
+    <div className="nb footer">
+      <p>&copy; {currentYear} SwiftPark. All Rights Reserved.</p>
     </div>
   );
 };

@@ -33,7 +33,9 @@ function MpesaPaymentModal({ calculatedAmount, onClose, onPaymentSuccess }) {
         <label>Phone</label><br />
         <input type="text" value={phone} onChange={handlePhoneChange}/><br />
 
-        <button type="button" onClick={payHandler}>Pay</button>
+        <div style={{ marginRight:'100px', width:'10px'}}>
+          <button type="button" onClick={payHandler}>Pay</button>
+        </div>
       </form>
     </div>
   );

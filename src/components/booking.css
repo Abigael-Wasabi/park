@@ -5,7 +5,7 @@
     /* box-shadow: 2px 2px 2px burlywood; */
     height: 900px;
     width: 600px;
-    /* background-color:rgba(222, 184, 135,0.5); */
+    background-color:rgba(222, 148, 135,0.5);
   } 
   input{
     width: 100%;
@@ -30,4 +30,7 @@
     background-color: transparent;
     margin-left: 200px;
     margin-top: 20px;
+  }
+  .paking{
+    background-color: rgba(222,184,135,0.5);
   }
